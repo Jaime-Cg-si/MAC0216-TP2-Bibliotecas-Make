@@ -1,0 +1,196 @@
+% MAC0216 - Técnicas de Programação I
+% Trabalho Prático 2 - Biblioteca Modular em C
+% Relatório Técnico
+
+
+\documentclass[12pt,a4paper]{article}
+
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{indentfirst}
+\usepackage{csquotes}
+
+
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\usepackage{parskip}
+\setlength{\parindent}{1.25cm}
+
+\usepackage{microtype}
+
+
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage[font=small,labelfont=bf]{caption}
+\usepackage{xspace}
+
+\graphicspath{{figuras/}}
+
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\hypersetup{
+  pdftitle={Biblioteca Modular em C - Relatório Técnico},
+  pdfsubject={MAC0216 - Técnicas de Programação I - Trabalho Prático 2},
+  pdfkeywords={C, biblioteca, Makefile, ligação estática, ligação dinâmica,
+    testes, Git, aprendizado de máquina}
+}
+
+
+\usepackage{listings}
+
+\definecolor{codeback}{RGB}{248,248,248}
+\definecolor{codeframe}{RGB}{215,215,215}
+\definecolor{codekey}{RGB}{0,80,160}
+\definecolor{codecomment}{RGB}{100,120,100}
+\definecolor{codestring}{RGB}{160,50,30}
+\definecolor{codeline}{RGB}{150,150,150}
+
+
+\lstset{
+  extendedchars=true,
+  literate=%
+    {á}{{\'a}}1 {à}{{\`a}}1 {â}{{\^a}}1 {ã}{{\~a}}1 {ä}{{\"a}}1
+    {é}{{\'e}}1 {ê}{{\^e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ô}{{\^o}}1
+    {õ}{{\~o}}1 {ú}{{\'u}}1 {ü}{{\"u}}1 {ç}{{\c c}}1
+    {Á}{{\'A}}1 {À}{{\`A}}1 {Â}{{\^A}}1 {Ã}{{\~A}}1
+    {É}{{\'E}}1 {Ê}{{\^E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ô}{{\^O}}1
+    {Õ}{{\~O}}1 {Ú}{{\'U}}1 {Ç}{{\c C}}1
+    {°}{{\textdegree}}1
+}
+
+% Estilo para código-fonte em C (com numeração de linhas).
+\lstdefinestyle{codigo}{
+  language=C,
+  backgroundcolor=\color{codeback},
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codekey}\bfseries,
+  commentstyle=\color{codecomment}\itshape,
+  stringstyle=\color{codestring},
+  numbers=left,
+  numberstyle=\tiny\color{codeline},
+  numbersep=8pt,
+  frame=single,
+  rulecolor=\color{codeframe},
+  framesep=5pt,
+  breaklines=true,
+  breakatwhitespace=false,
+  postbreak=\mbox{\textcolor{codeline}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b,
+  xleftmargin=15pt,
+  aboveskip=1em,
+  belowskip=1em
+}
+
+% Estilo para trechos do Makefile.
+\lstdefinestyle{makefile}{
+  style=codigo,
+  language={[gnu]make}
+}
+
+% Estilo para sessões de terminal (sem numeração).
+\lstdefinestyle{terminal}{
+  language={},
+  backgroundcolor=\color{codeback},
+  basicstyle=\ttfamily\footnotesize,
+  numbers=none,
+  frame=single,
+  rulecolor=\color{codeframe},
+  framesep=5pt,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b,
+  xleftmargin=0pt,
+  aboveskip=1em,
+  belowskip=1em
+}
+
+\lstset{style=codigo}
+
+\renewcommand{\lstlistingname}{Listagem}
+\renewcommand{\lstlistlistingname}{Lista de Listagens}
+
+
+% Marca o que ainda falta escrever (remover todas as ocorrências antes da entrega).
+\newcommand{\preencher}[1]{\textcolor{red}{[#1]}}
+
+% TODO: trocar pelo nome escolhido para a biblioteca.
+\newcommand{\biblioteca}{\texttt{\preencher{Biblioteca de ML}}\xspace}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newcommand{\opt}[1]{\texttt{-{}-#1}}
+
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+
+%------------------------------------------------------------------------------
+% Capa
+%------------------------------------------------------------------------------
+\begin{titlepage}
+\centering
+
+{\large UNIVERSIDADE DE SÃO PAULO\par}
+{\large Instituto de Matemática, Estatística e Ciência da Computação\par}
+\vspace{0.3cm}
+{\large MAC0216 --- Técnicas de Programação I\par}
+
+\vfill
+
+{\Huge\bfseries \biblioteca\par}
+\vspace{0.6cm}
+{\Large Biblioteca Modular em C para Aprendizado de Máquina\par}
+\vspace{0.4cm}
+{\large Relatório Técnico --- Trabalho Prático 2\par}
+
+\vfill
+
+{\large\bfseries Integrantes\par}
+\vspace{0.4cm}
+\begin{tabular}{l@{\hspace{1.5cm}}l}
+  Felipe Brancalhão Curcio  & 16985106 \\ [4pt]
+  Jaime Cavalcanti Guedes   & 16875204 \\ [4pt]
+  João Pedro Silva Amadio   & 13672533 \\ [4pt]
+  Murilo Santos de Castro   & 17015895 \\ [4pt]
+\end{tabular}
+
+\vfill
+
+{\large São Paulo\par}
+{\large \the\year\par}
+
+\end{titlepage}
+
+
+\pagenumbering{roman}
+\tableofcontents
+\newpage
+\pagenumbering{arabic}
+\hypersetup{pageanchor=true}
+
+%==============================================================================
+\section{Introdução}\label{sec:introducao}
+%==============================================================================
+% Enunciado, Seção 7, item 1: descrição do problema e do domínio escolhido.
+
+Este relatório descreve o projeto e a implementação da \biblioteca, uma
+biblioteca modular escrita em linguagem C e voltada para a área de aprendizado
+de máquina (\emph{Machine Learning}), acompanhada de uma aplicação cliente de
+linha de comando. O código-fonte está disponível no repositório
+\href{https://github.com/Jaime-Cg-si/MAC0216-TP2-Bibliotecas-Make.git}{TP2}.
+
+\end{document}
