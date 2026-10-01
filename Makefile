@@ -11,7 +11,7 @@ BUILD_DIR   := build
 #Variáveis de compilação
 CC       := gcc
 CFLAGS   := -Wall -Wextra -g -std=c11
-CPPFLAGS := -I$(INCLUDE_DIR)
+CPPFLAGS := -I$(INCLUDE_DIR) -MMD -MP
 
 #Processo de descoberta dos arquivos-fonte (.c)
 ARQ_SRC := $(wildcard $(SRC_DIR)/*.c)
@@ -19,6 +19,10 @@ OBJ_SRC := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_SRC))
 
 ARQ_APP := $(wildcard $(APP_DIR)/*.c)
 OBJ_APP := $(patsubst $(APP_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_APP))
+
+#Processo de criação dos arquivos .d, responsáveis por informar as dependências dos arquivos
+ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP))
+
 
 #Variável do arquivo executável
 EXE := $(BIN_DIR)/biblioteca_ml
@@ -60,3 +64,5 @@ $(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
 #Regra para a geração do executável
 $(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
 	$(CC) $(^) -o $(@)
+
+-include $(ARQ_D)
