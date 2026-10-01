@@ -22,8 +22,11 @@ OBJ_APP := $(patsubst $(APP_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_APP))
 
 #Variável do arquivo executável
 EXE := $(BIN_DIR)/biblioteca_ml
+
+#Regra para execução de todo o processo
 all: $(EXE)
 
+#Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
 	@echo "### VARIÁVEIS DE DIRETÓRIOS ###"
 	@echo "[$(INCLUDE_DIR)]"
@@ -41,3 +44,19 @@ exibe_variaveis:
 	@echo "[OBJ_SRC = $(OBJ_SRC)]"
 	@echo "[ARQ_APP = $(ARQ_APP)]"
 	@echo "[OBJ_APP = $(OBJ_APP)]"
+
+#Regra para criação dos diretórios build/ e bin/
+$(BUILD_DIR) $(BIN_DIR):
+	mkdir -p $(@)
+
+#Regra padrão para a compilação .c->.o dos arquivos em src/
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
+
+#Regra padrão para a compilação .c->.o dos arquivos em app/
+$(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
+
+#Regra para a geração do executável
+$(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
+	$(CC) $(^) -o $(@)

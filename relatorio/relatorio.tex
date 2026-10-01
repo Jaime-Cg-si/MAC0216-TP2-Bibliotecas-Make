@@ -235,4 +235,21 @@ vindos de \emph{app/}.
 Com isso, o Makefile separa o nome de cada arquivo de seu prefixo e sufixo, utilizando-o para nomear 
 o arquivo objeto, já na pasta correspondente (\emph{build/}).
 
+\subsection{Criação de diretórios via Makefile}\label{subsec:makefile_criacao_dir}
+Como os diretórios \emph{build/} e \emph{bin/} não estão sendo versionados, a fim de deixar o histórico do 
+github mais limpo, é necessário garantir que ambos existam antes de rodar algo como \emph{make run}.
+
+Por isso, criou-se um comando que, utilizando as variáveis definidas nas seções anteriores, cria tais 
+subdiretórios.
+
+\subsection{Compilação dos arquivos via Makefile}\label{subsec:makefile_compilacao}
+Foram criadas duas regras para a compilação dos arquivos .c em arquivos .o - ambas utilizam a mesma lógica - apenas
+diferem no local onde procuram os arquivos.
+
+Para gerar um arquivo cujo nome é especificado no momento de chamada do comando, o Makefile primeiro
+procura pelo .c correspondente no diretório \emph{src/}. Além disso, é verificada a existência do subdiretório \emph{build/} que,
+caso seja inexistente, é criado via regra anterior. Se o arquivo não existir em \emph{src/}, então o Makefile procura em
+\emph{app/} e, somente em falha deste segundo, retorna erro.
+
+
 \end{document}
