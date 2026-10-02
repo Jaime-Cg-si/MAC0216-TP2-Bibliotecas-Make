@@ -21,3 +21,4 @@ void exibir_funcionalidades_no_terminal(){
 
     exibir_separador();
 }
+

@@ -65,4 +65,9 @@ $(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
 $(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
 	$(CC) $(^) -o $(@)
 
+#Regra auxiliar para limpar os diretórios build e bin
+clean: | $(BIN_DIR) $(BUILD_DIR)
+	rm -r $(BIN_DIR)
+	rm -r $(BUILD_DIR)
+
 -include $(ARQ_D)
