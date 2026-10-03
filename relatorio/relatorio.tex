@@ -129,7 +129,7 @@
 \newcommand{\preencher}[1]{\textcolor{red}{[#1]}}
 
 % TODO: trocar pelo nome escolhido para a biblioteca.
-\newcommand{\biblioteca}{\texttt{\preencher{Biblioteca de ML}}\xspace}
+\newcommand{\biblioteca}{\texttt{{Biblioteca de ML}}\xspace}
 \newcommand{\cmd}[1]{\texttt{#1}}
 \newcommand{\opt}[1]{\texttt{-{}-#1}}
 
@@ -222,7 +222,7 @@ foram definidas as seguintes variáveis contendo os caminhos dos diretórios:
 A fim de visualizar os valores recebidos por cada uma destas variáveis, foi definida a função
 auxiliar \emph{exibe\_variaveis}
 
-\subsection{Descoberta dos arquivos-fonte}\label{subsec:makefile_desc_arq_fonte}
+\subsection{Descoberta dos arquivos-fonte}\label{subsec:makefile_descoberta_arq_fonte}
 Para que o Makefile consiga encontrar de maneira independente os arquivos .c e seguir um modelo de
 nomenclatura estabelecido a fim de criar os objetos, foi utilizada uma combinação das funções \emph{wildcard} e 
 \emph{patsubst}.
@@ -251,5 +251,7 @@ procura pelo .c correspondente no diretório \emph{src/}. Além disso, é verifi
 caso seja inexistente, é criado via regra anterior. Se o arquivo não existir em \emph{src/}, então o Makefile procura em
 \emph{app/} e, somente em falha deste segundo, retorna erro.
 
+
+\subsection{\emph{make test}}\label{subsec:makefile_make_test}
 
 \end{document}
