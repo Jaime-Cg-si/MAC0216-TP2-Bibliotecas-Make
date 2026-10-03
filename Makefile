@@ -14,21 +14,36 @@ CFLAGS   := -Wall -Wextra -g -std=c11
 CPPFLAGS := -I$(INCLUDE_DIR) -MMD -MP
 
 #Processo de descoberta dos arquivos-fonte (.c)
-ARQ_SRC := $(wildcard $(SRC_DIR)/*.c)
-OBJ_SRC := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_SRC))
+ARQ_SRC   := $(wildcard $(SRC_DIR)/*.c)
+OBJ_SRC   := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_SRC))
 
-ARQ_APP := $(wildcard $(APP_DIR)/*.c)
-OBJ_APP := $(patsubst $(APP_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_APP))
+ARQ_APP   := $(wildcard $(APP_DIR)/*.c)
+OBJ_APP   := $(patsubst $(APP_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_APP))
+
+ARQ_TESTS := $(wildcard $(TESTS_DIR)/*.c)
+OBJ_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BUILD_DIR)/%.o,$(ARQ_TESTS))
 
 #Processo de criação dos arquivos .d, responsáveis por informar as dependências dos arquivos
-ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP))
+ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP) $(OBJ_TESTS))
 
 
 #Variável do arquivo executável
 EXE := $(BIN_DIR)/biblioteca_ml
+EXE_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BIN_DIR)/%,$(ARQ_TESTS))
 
 #Regra para execução de todo o processo
 all: $(EXE)
+
+#Regra para execução dos testes
+test: $(EXE_TESTS)
+	@erro=0; \
+	for arq in $(^); do \
+	echo "Executando $$arq..."; \
+	$$arq || erro=1; \
+	done; \
+	echo "Código de saída do teste: $$erro"; \
+	exit $$erro
+	
 
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
@@ -48,6 +63,8 @@ exibe_variaveis:
 	@echo "[OBJ_SRC = $(OBJ_SRC)]"
 	@echo "[ARQ_APP = $(ARQ_APP)]"
 	@echo "[OBJ_APP = $(OBJ_APP)]"
+	@echo "[ARQ_TESTS = $(ARQ_TESTS)]"
+	@echo "[OBJ_TESTS =  $(OBJ_TESTS)]"
 
 #Regra para criação dos diretórios build/ e bin/
 $(BUILD_DIR) $(BIN_DIR):
@@ -61,9 +78,19 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
 
-#Regra para a geração do executável
+#Regra padrão para a compilação .c->.o dos arquivos em tests/
+$(BUILD_DIR)/%.o: $(TESTS_DIR)/%.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
+
+#Regra para a geração do executável final
 $(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
 	$(CC) $(^) -o $(@)
+
+#Regra padrão estática para a geração do executável dos testes
+$(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(OBJ_SRC) | $(BIN_DIR)
+	$(CC) $(^) -o $(@)
+
+
 
 #Regra auxiliar para limpar os diretórios build e bin
 clean: 
