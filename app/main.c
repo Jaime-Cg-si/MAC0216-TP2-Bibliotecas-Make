@@ -1,6 +1,6 @@
 #include "cli.h"
 
 int main(){
-    exibir_funcionalidades_no_terminal();
+    cli_run();
     return 0;
 }

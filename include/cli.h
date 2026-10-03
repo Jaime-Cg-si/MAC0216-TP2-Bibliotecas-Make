@@ -1,14 +1,22 @@
 #ifndef CLI_H
 #define CLI_H
 
+/**
+* @brief    Recebe o número correspondente ao método de Machine Learning escolhido pelo usuário
+* @param    opcoes_funcionalidades_validas: vetor de inteiros correspondente aos índices das funcionalidades disponíveis
+* @warning  Não verifica se o vetor opcoes_funcionalidades_validas está vazio. Presume que existe pelo menos um valor.
+* @return   O número (válido) escolhido pelo usuário
+* @note     Não retorna enquanto o usuário não escolher uma opção válida
+*/
+int parsear_escolha_funcionalidade_usuario(int* opcoes_funcionalidades_validas);
+
 
 /**
-* @brief    Apresenta todas as opções de ação que o usuário pode tomar
-* @post     Printa, no terminal, o índice das ações e como invocá-las. A função já lida com os "\\n"
-* @note     Apenas exibe as funções, não é capaz de parsear a opção
-* @warning  Deve ser atualizada sempre que uma nova funcionalidade é adicionada ao projeto
+* @brief    Função principal, responsável pelo fluxo de chamadas das funções desta API
+* @warning  Depende da saída de outras rotinas. Implementar algum sistema de contagem de tempo?
+* @note     Repete o ciclo: Exibe funcionalidades -> Recebe o input da funcionalidade -> Invoca a funcionalidade
 */
-void exibir_funcionalidades_no_terminal();
+void cli_run();
 
 
 
