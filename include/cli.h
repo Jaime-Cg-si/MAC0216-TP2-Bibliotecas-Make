@@ -4,12 +4,12 @@
 #include <stdbool.h>
 /**
 * @brief    Recebe o número correspondente ao método de Machine Learning escolhido pelo usuário
-* @param    opcoes_funcionalidades_validas: vetor de inteiros correspondente aos índices das funcionalidades disponíveis
-* @warning  Não verifica se o vetor opcoes_funcionalidades_validas está vazio. Presume que existe pelo menos um valor.
-* @return   O número (válido) escolhido pelo usuário
-* @note     Não retorna enquanto o usuário não escolher uma opção válida
+* @param    opcoes_funcionalidades_validas: vetor constante de inteiros correspondente aos índices das funcionalidades disponíveis
+* @param    tamanho_vetor_funcionalidades : inteiro constante que corresponde ao número de opções válidas do programa.
+* @return   O número (válido) escolhido pelo usuário ou, em caso de erro (vetor nulo ou tamanho <= 0), a opção de encerramento do programa
+* @note     Não retorna enquanto o usuário não escolher uma opção válida.
 */
-int parsear_escolha_funcionalidade_usuario(int* opcoes_funcionalidades_validas);
+int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades);
 
 
 /**
