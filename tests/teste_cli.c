@@ -26,7 +26,6 @@ static void verificar_resultado_teste(bool resultado_teste, const char* descrica
     printf("%s\n", descricao_instancia);
 }
 
-
 /**
 * @brief    Testa a função validar_escolha_funcionalidade.
 * @par      Para cada instância do teste, invoca a validar_escolha_funcionalidade(...) e exibe os resultados
@@ -104,6 +103,13 @@ static void grupo_testes_input_funcionalidade(){
     bool resultado_teste8 = validar_escolha_funcionalidade(4, vetor_funcionalidades, -1);
     verificar_resultado_teste(resultado_teste8 == false, "opc 4 em {1,2,3,-1,4} (tamanho -1) -> false");
 
+    /*
+    Teste 09 - Uso inválido.
+    Instância: Vetor com tamanho especificado errado.
+    Valor esperado: false.
+    */
+    bool resultado_teste9 = validar_escolha_funcionalidade(4, vetor_funcionalidades, 4);
+    verificar_resultado_teste(resultado_teste9 == false, "opc 4 em {1,2,3,-1,4} (tamanho 4) -> false");
 }
 
 int main(){

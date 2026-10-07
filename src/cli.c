@@ -83,6 +83,14 @@ void cli_run(){
 }
 
 bool validar_escolha_funcionalidade(int opcao_funcionalidade_escolhida, const int* opcoes_funcionalidades_validas, int tamanho_vetor_funcionalidades){
-    //Implementar validação.
+
+    if (tamanho_vetor_funcionalidades <= 0 || opcoes_funcionalidades_validas == NULL) return false;
+
+    for (int i = 0; i < tamanho_vetor_funcionalidades; i++){
+        if (opcao_funcionalidade_escolhida == opcoes_funcionalidades_validas[i]){
+            return true;
+        }
+    }
+
     return false;
 }
