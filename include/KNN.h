@@ -9,6 +9,7 @@
  * printf("%d\n", classe);
  */
 
+#include "IO.h"
 typedef struct sample {
     int classe;
     double *features;
@@ -18,7 +19,7 @@ typedef struct knn {
 
     int n_samples;
     int n_features;
-    sample *samples;
+    sample **samples;
     //esses arrays servem para armazenar o maior e menor valor da i-esima feature, para que depois seja feita a normalizacao do valor
     double *max_feature;
     double *min_feature;
@@ -33,7 +34,7 @@ typedef struct knn {
  * @param m Matriz carregada com amostras.
  * @return Ponteiro para o knn carregado com amostras.
  */
-knn * carregar_knn(double **, int n_samples, int n_features);
+knn * carregar_knn(matriz * m);
 
 
 /**
