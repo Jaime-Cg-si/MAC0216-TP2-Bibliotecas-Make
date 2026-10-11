@@ -10,6 +10,7 @@ a.out
 *.o
 .vscode/
 .csv
+ML
 #Compilação
 /build/
 /bin/
