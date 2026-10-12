@@ -12,6 +12,7 @@ BUILD_DIR   := build
 CC       := gcc
 CFLAGS   := -Wall -Wextra -g -std=c11
 CPPFLAGS := -I$(INCLUDE_DIR) -MMD -MP
+LDLIBS   := -lm
 
 #Processo de descoberta dos arquivos-fonte (.c)
 ARQ_SRC   := $(wildcard $(SRC_DIR)/*.c)
@@ -83,11 +84,11 @@ $(BUILD_DIR)/%.o: $(TESTS_DIR)/%.c | $(BUILD_DIR)
 
 #Regra para a geração do executável final
 $(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
-	$(CC) $(^) -o $(@)
+	$(CC) $(^) -o $(@) $(LDLIBS)
 
 #Regra padrão estática para a geração do executável dos testes
 $(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(OBJ_SRC) | $(BIN_DIR)
-	$(CC) $(^) -o $(@)
+	$(CC) $(^) -o $(@) $(LDLIBS)
 
 
 

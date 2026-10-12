@@ -9,7 +9,8 @@ a.out
 *.mp4
 *.o
 .vscode/
-
+.csv
+ML
 #Compilação
 /build/
 /bin/
