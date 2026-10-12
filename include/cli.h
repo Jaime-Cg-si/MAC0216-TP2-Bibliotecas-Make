@@ -9,7 +9,7 @@
 * @param    opcoes_funcionalidades_validas: vetor constante de inteiros correspondente aos índices das funcionalidades disponíveis
 * @param    tamanho_vetor_funcionalidades : inteiro constante que corresponde ao número de opções válidas do programa.
 * @return   O número (válido) escolhido pelo usuário ou, em caso de erro (vetor nulo, tamanho <= 0, EOF), a opção de encerramento do programa
-* @note     Não retorna enquanto o usuário não escolher uma opção válida.
+* @note     Não retorna enquanto o usuário não escolher uma opção válida. Retorna em caso de EOF
 */
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades);
 
