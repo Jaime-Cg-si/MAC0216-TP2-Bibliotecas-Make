@@ -112,9 +112,82 @@ static void grupo_testes_input_funcionalidade(){
     verificar_resultado_teste(resultado_teste9 == false, "opc 4 em {1,2,3,-1,4} (tamanho 4) -> false");
 }
 
+/**
+* @brief    Testa a função parsear_escolha_funcionalidade_usuario.
+* @note     Possui seu próprio vetor de funcionalidades.
+*/
+static void grupo_testes_parsear_escolha_funcionalidade(){
+    int vetor_opcoes[] = {1, 2, -1};
+    int tamanho_vetor_opcoes = sizeof(vetor_opcoes) / sizeof(vetor_opcoes[0]);
+
+    /*
+    Teste 01 - Uso inválido.
+    Instância: Vetor NULL.
+    Consome: nenhum dado do arquivo.
+    Valor esperado: OPCAO_SAIDA_PROGRAMA.
+    */
+    int resultado_teste1 = parsear_escolha_funcionalidade_usuario(NULL, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste1 == OPCAO_SAIDA_PROGRAMA, "vetor NULL (tamanho 3) -> OPCAO_SAIDA_PROGRAMA");
+
+    /*
+    Teste 02 - Uso inválido.
+    Instância: Vetor de tamanho 0.
+    Consome: nenhum dado do arquivo.
+    Valor esperado: OPCAO_SAIDA_PROGRAMA.
+    */
+    int resultado_teste2 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, 0);
+    verificar_resultado_teste(resultado_teste2 == OPCAO_SAIDA_PROGRAMA, "vetor de tamanho 0 -> OPCAO_SAIDA_PROGRAMA");
+
+    /*
+    Teste 03 - Uso padrão.
+    Instância: Opção válida como primeiro input.
+    Consome: 1 (linha 1).
+    Valor esperado: 1.
+    */
+    int resultado_teste3 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste3 == 1, "opc 1 em {1, 2, -1} (tam. 3) -> 1");
+
+    /*
+    Teste 04 - Uso limite.
+    Instância: Opção inválida, depois válida.
+    Consome: 7; 2 (linhas 2, 3).
+    Valor esperado: 2.
+    */
+    int resultado_teste4 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste4 == 2, "opc 7; 2 em {1,2,-1} (tam. 3) -> 2");
+
+    /*
+    Teste 05 - Uso limite.
+    Instância: Opção não-numérica (sequência abc) ; Opção válida.
+    Consome: abc; 1 (linhas 4; 5).
+    Valor esperado: 1.
+    */
+    int resultado_teste5 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste5 == 1, "opc abc; 1 em {1,2,-1} (tam. 3)-> 1");
+
+    /*
+    Teste 06 - Uso limite.
+    Instância: Opção válida misturada com inválida.
+    Consome: 1abc (linha 6).
+    Valor esperado: 1.
+    */
+    int resultado_teste6 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste6 == 1, "opc 1abc em {1,2,-1} (tam. 3) -> 1");
+
+    /*
+    Teste 07 - Uso limite.
+    Instância: Fim de arquivo.
+    Consome: nenhum dado do arquivo.
+    Valor esperado: OPCAO_SAIDA_PROGRAMA.
+    */
+    int resultado_teste7 = parsear_escolha_funcionalidade_usuario(vetor_opcoes, tamanho_vetor_opcoes);
+    verificar_resultado_teste(resultado_teste7 == OPCAO_SAIDA_PROGRAMA, "opc EOF em {1,2,-1} (tam. 3) -> OPCAO_SAIDA_PROGRAMA");
+}
+
 int main(){
 
     grupo_testes_input_funcionalidade();
+    grupo_testes_parsear_escolha_funcionalidade();
     
     printf("Pontuação total: %d/%d\n", numero_sucessos, numero_sucessos+numero_fracassos);
     if (numero_fracassos != 0){

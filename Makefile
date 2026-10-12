@@ -7,6 +7,7 @@ SRC_DIR     := src
 TESTS_DIR   := tests
 BIN_DIR     := bin
 BUILD_DIR   := build
+DADOS_DIR	:= $(TESTS_DIR)/dados
 
 #Variáveis de compilação
 CC       := gcc
@@ -40,7 +41,24 @@ test: $(EXE_TESTS)
 	@erro=0; \
 	for arq in $(^); do \
 	echo "Executando $$arq..."; \
-	$$arq || erro=1; \
+	nome_arq=$$(basename $$arq); \
+	nome_arq_entrada=$(DADOS_DIR)/$$nome_arq.entrada; \
+	nome_arq_saida=$(DADOS_DIR)/$$nome_arq.saida; \
+	if [ ! -f $$nome_arq_entrada ]; then \
+	nome_arq_entrada=/dev/null; \
+	fi; \
+	if [ -f $$nome_arq_saida ]; then \
+	nome_arq_saida_obtida=$(BUILD_DIR)/$$nome_arq.obtida; \
+	$$arq < $$nome_arq_entrada > $$nome_arq_saida_obtida || erro=1; \
+	if diff -u $$nome_arq_saida $$nome_arq_saida_obtida;then \
+	echo "Mesma saída"; \
+	else \
+	echo "Saídas diferentes."; \
+	erro=1; \
+	fi; \
+	else \
+	$$arq < $$nome_arq_entrada || erro=1; \
+	fi; \
 	done; \
 	echo "Código de saída do teste: $$erro"; \
 	exit $$erro
