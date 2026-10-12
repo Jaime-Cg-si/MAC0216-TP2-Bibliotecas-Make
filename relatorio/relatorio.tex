@@ -255,6 +255,21 @@ caso seja inexistente, é criado via regra anterior. Se o arquivo não existir e
 \section{Testes}\label{sec:testes}
 
 \subsection{Testes do módulo \textbf{CLI}}\label{subsec:testes_cli}
+Os testes deste módulo foram divididos em três categorias:
 
+\begin{itemize}
+  \item Testes unitários com valores fixos: \\
+  O intuito deste tipo de teste é testar a função \emph{validar\_escolha\_funcionalidade} em casos de 
+  inputs inválidos. Sua comparação é feita diretamente entre o retorno da função e o valor esperado.
+
+  \item Testes unitários com entrada redirecionada: \\
+  Testar a função \emph{parsear\_escolha\_funcionalidade\_usuario} em casos de buffer de entrada alterados.
+  Para simular o usuário, foi utilizado um arquivo .entrada. Sua comparação é feita diretamente entre o retorno da
+  função e o valor esperado.
+
+  \item Testes de saída: \\
+  Testar a função \emph{cli\_run} em casos de seleções de funcionalidades subsequentes.
+  Redireciona os printfs da função para um arquivo de saída e depois compara com os valores esperados usando \emph{diff -u}.
+\end{itemize}
 
 \end{document}
