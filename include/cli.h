@@ -1,12 +1,14 @@
 #ifndef CLI_H
 #define CLI_H
-
 #include <stdbool.h>
+
+#define OPCAO_SAIDA_PROGRAMA (-1)
+
 /**
 * @brief    Recebe o número correspondente ao método de Machine Learning escolhido pelo usuário
 * @param    opcoes_funcionalidades_validas: vetor constante de inteiros correspondente aos índices das funcionalidades disponíveis
 * @param    tamanho_vetor_funcionalidades : inteiro constante que corresponde ao número de opções válidas do programa.
-* @return   O número (válido) escolhido pelo usuário ou, em caso de erro (vetor nulo ou tamanho <= 0), a opção de encerramento do programa
+* @return   O número (válido) escolhido pelo usuário ou, em caso de erro (vetor nulo, tamanho <= 0, EOF), a opção de encerramento do programa
 * @note     Não retorna enquanto o usuário não escolher uma opção válida.
 */
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades);

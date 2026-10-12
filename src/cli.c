@@ -4,7 +4,7 @@
 
 
 #define OPCAO_KNN 1
-#define OPCAO_SAIDA_PROGRAMA -1
+
 
 
 static const int OPCOES_FUNCIONALIDADES[] = {OPCAO_SAIDA_PROGRAMA, OPCAO_KNN};
@@ -46,6 +46,21 @@ static void exibir_funcionalidades_no_terminal(){
 
 }
 
+/**
+* @brief    Função auxiliar que limpa o buffer de entrada, para garantir a validez do input.
+* @note     Consome todos os carcteres até encontrar o '\n' ou EOF
+*/
+
+static void limpar_buffer_input(){
+    int caracter = getchar();
+
+    while (caracter != '\n' && caracter != EOF){
+        caracter = getchar();
+    }
+}
+
+
+
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades){
 
     if (tamanho_vetor_funcionalidades <= 0 || opcoes_funcionalidades_validas == NULL){
@@ -54,11 +69,17 @@ int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_val
 
     int resposta_usuario = 0;
 
+    int itens_lidos;
     do{
         exibir_texto_input();
-        scanf("%d", &resposta_usuario);
-    }while(validar_escolha_funcionalidade(resposta_usuario, opcoes_funcionalidades_validas, 
-    tamanho_vetor_funcionalidades) == false);
+        itens_lidos = scanf("%d", &resposta_usuario);
+        if (itens_lidos == EOF){
+            return OPCAO_SAIDA_PROGRAMA;
+        }
+
+        limpar_buffer_input();
+    }while(itens_lidos == 0 || validar_escolha_funcionalidade(resposta_usuario, opcoes_funcionalidades_validas, 
+    tamanho_vetor_funcionalidades) == false );
 
     return resposta_usuario;
 }

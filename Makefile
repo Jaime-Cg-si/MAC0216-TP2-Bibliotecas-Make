@@ -34,7 +34,7 @@ EXE_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BIN_DIR)/%,$(ARQ_TESTS))
 #Regra para execução de todo o processo
 all: $(EXE)
 
-#Regra para execução dos testes
+#Regra para execução dos testes automatizados
 test: $(EXE_TESTS)
 	@erro=0; \
 	for arq in $(^); do \
@@ -43,7 +43,6 @@ test: $(EXE_TESTS)
 	done; \
 	echo "Código de saída do teste: $$erro"; \
 	exit $$erro
-	
 
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
