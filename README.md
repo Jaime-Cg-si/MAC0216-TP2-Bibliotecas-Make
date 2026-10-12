@@ -25,3 +25,16 @@ A princípio, foi estipulada a seguinte divisão dos módulos de acordo com suas
 
 - **CLI**
 > Funções relacionadas à criação e gerenciamento da CLI
+
+## 3. Comandos do Makefile:
+
+### Obrigatórios
+
+- **all**:      _já implementado_
+- **clean**:    _já implementado_
+- **run**:      _necessário implementar_
+- **test**:     _já implementado_
+- **install**:  _necessário implementar_
+
+### Adicionais
+- **exibe_variaveis**: responsável por printar, no terminal, os valores de todas as variáveis do Makefile

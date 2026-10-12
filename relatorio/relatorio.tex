@@ -129,7 +129,7 @@
 \newcommand{\preencher}[1]{\textcolor{red}{[#1]}}
 
 % TODO: trocar pelo nome escolhido para a biblioteca.
-\newcommand{\biblioteca}{\texttt{\preencher{Biblioteca de ML}}\xspace}
+\newcommand{\biblioteca}{\texttt{{Biblioteca de ML}}\xspace}
 \newcommand{\cmd}[1]{\texttt{#1}}
 \newcommand{\opt}[1]{\texttt{-{}-#1}}
 
@@ -192,5 +192,69 @@ biblioteca modular escrita em linguagem C e voltada para a área de aprendizado
 de máquina (\emph{Machine Learning}), acompanhada de uma aplicação cliente de
 linha de comando. O código-fonte está disponível no repositório
 \href{https://github.com/Jaime-Cg-si/MAC0216-TP2-Bibliotecas-Make.git}{TP2}.
+
+%==============================================================================
+\section{Makefile}\label{sec:makefile}
+%==============================================================================
+% Enunciado, Seção 3.4: Makefile
+
+\subsection{Variáveis de diretório}\label{subsec:makefile_var_dir}
+Para evitar problemas na compilação do código devido a mudanças na estrutura do projeto, 
+foram definidas as seguintes variáveis contendo os caminhos dos diretórios:
+
+\begin{itemize}
+  \item \emph{INCLUDE\_DIR}:    diretório que contém os arquivos .h
+  \item \emph{APP\_DIR}:        diretório que contém a main.c
+  \item \emph{SRC\_DIR}:        diretório que contém as implementações dos arquivos .h 
+  \item \emph{TESTS\_DIR}:      diretório que contém os testes lógicos
+  \item \emph{BIN\_DIR}:        diretório que contém os arquivos .o
+  \item \emph{BUILD\_DIR}:      diretório que contém os arquivos executáveis
+\end{itemize}
+
+
+
+\subsection{Variáveis de compilação}\label{subsec:makefile_var_comp}
+\begin{itemize}
+  \item \emph{CC}:        compilador utilizado (Default = gcc)
+  \item \emph{CFLAGS}:    \emph{flags} de compilação (Default = -Wall -Wextra -g -std=c11)
+  \item \emph{CPPFLAGS}:  onde buscar os arquivos .h 
+\end{itemize}
+A fim de visualizar os valores recebidos por cada uma destas variáveis, foi definida a função
+auxiliar \emph{exibe\_variaveis}
+
+\subsection{Descoberta dos arquivos-fonte}\label{subsec:makefile_descoberta_arq_fonte}
+Para que o Makefile consiga encontrar de maneira independente os arquivos .c e seguir um modelo de
+nomenclatura estabelecido a fim de criar os objetos, foi utilizada uma combinação das funções \emph{wildcard} e 
+\emph{patsubst}.
+
+Assim, o Makefile procura nos diretórios \emph{src/} e \emph{app/} por arquivos .c e salva seus 
+nomes em 2 listas diferentes, utilizando como critério o diretório de origem do arquivo. Ou seja, 
+ao fim desta etapa tem-se uma lista com os arquivos .c vindos de \emph{src/} e outra com aqueles
+vindos de \emph{app/}.
+
+Com isso, o Makefile separa o nome de cada arquivo de seu prefixo e sufixo, utilizando-o para nomear 
+o arquivo objeto, já na pasta correspondente (\emph{build/}).
+
+\subsection{Criação de diretórios via Makefile}\label{subsec:makefile_criacao_dir}
+Como os diretórios \emph{build/} e \emph{bin/} não estão sendo versionados, a fim de deixar o histórico do 
+github mais limpo, é necessário garantir que ambos existam antes de rodar algo como \emph{make run}.
+
+Por isso, criou-se um comando que, utilizando as variáveis definidas nas seções anteriores, cria tais 
+subdiretórios.
+
+\subsection{Compilação dos arquivos via Makefile}\label{subsec:makefile_compilacao}
+Foram criadas duas regras para a compilação dos arquivos .c em arquivos .o - ambas utilizam a mesma lógica - apenas
+diferem no local onde procuram os arquivos.
+
+Para gerar um arquivo cujo nome é especificado no momento de chamada do comando, o Makefile primeiro
+procura pelo .c correspondente no diretório \emph{src/}. Além disso, é verificada a existência do subdiretório \emph{build/} que,
+caso seja inexistente, é criado via regra anterior. Se o arquivo não existir em \emph{src/}, então o Makefile procura em
+\emph{app/} e, somente em falha deste segundo, retorna erro.
+
+
+\section{Testes}\label{sec:testes}
+
+\subsection{Testes do módulo \textbf{CLI}}\label{subsec:testes_cli}
+
 
 \end{document}
