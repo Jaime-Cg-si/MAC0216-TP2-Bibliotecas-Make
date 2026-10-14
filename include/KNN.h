@@ -10,13 +10,13 @@
  */
 
 #include "IO.h"
-typedef struct sample {
+typedef struct {
     int classe;
     double *features;
 }sample;
 
-typedef struct knn {
-
+typedef struct {
+    int num_classes;
     int n_samples;
     int n_features;
     sample **samples;
@@ -24,6 +24,12 @@ typedef struct knn {
     double *max_feature;
     double *min_feature;
 }knn;
+
+typedef struct {
+    double dist;
+    int idx;
+
+}k_vizinho;
 
 
 /**
@@ -47,7 +53,7 @@ knn * carregar_knn(matriz * m);
  * @param k o 'k' de KNN, ou seja, a quantidade de vizinhos avaliado.
  * @return Classe da amostra sem classe.
  */
-int rodar_knn(knn * v, sample sample_wo_class, int k);
+int rodar_knn(knn * v, sample * sample_wo_class, int k);
 
 
 

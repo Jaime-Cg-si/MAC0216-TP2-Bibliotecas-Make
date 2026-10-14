@@ -1,12 +1,17 @@
 #include "KNN.h"
 #include "IO.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argv, char * argc[]) {
-    matriz * m = carregar_csv("a.csv", 4, 3);
-    printf("%d\n", m->l);
+    matriz * m = carregar_csv("exemplos/a.csv", 5, 3);
 
     knn * a = carregar_knn(m);
-    printf("%.2f", a->max_feature[4]);
+    sample * x = malloc(sizeof(sample));
+    x->features = malloc(2*sizeof(double));
+    x->features[0] = 15.2;
+    x->features[1] = 0.2;
+    printf("CLASSE: %d\n", rodar_knn(a,x, 2 ));
+    return 0;
 
 }
