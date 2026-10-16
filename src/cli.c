@@ -2,14 +2,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-
 #define OPCAO_KNN 1
-
-
 
 static const int OPCOES_FUNCIONALIDADES[] = {OPCAO_SAIDA_PROGRAMA, OPCAO_KNN};
 static const int TAMANHO_VETOR_FUNCIONALIDADES = sizeof(OPCOES_FUNCIONALIDADES) / sizeof(OPCOES_FUNCIONALIDADES[0]);
-
 
 /**
 * @brief função auxiliar que exibe uma série de caracteres para separar o bloco de texto
@@ -50,7 +46,6 @@ static void exibir_funcionalidades_no_terminal(){
 * @brief    Função auxiliar que limpa o buffer de entrada, para garantir a validez do input.
 * @note     Consome todos os caracteres até encontrar o '\n' ou EOF
 */
-
 static void limpar_buffer_input(){
     int caracter = getchar();
 
@@ -58,8 +53,6 @@ static void limpar_buffer_input(){
         caracter = getchar();
     }
 }
-
-
 
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades){
 
