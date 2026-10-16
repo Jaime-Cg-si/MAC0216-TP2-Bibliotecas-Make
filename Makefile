@@ -45,6 +45,9 @@ test: $(EXE_TESTS)
 	echo "Código de saída do teste: $$erro"; \
 	exit $$erro
 
+run: $(EXE)
+	@exec $(EXE)
+
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
 	@echo "### VARIÁVEIS DE DIRETÓRIOS ###"
