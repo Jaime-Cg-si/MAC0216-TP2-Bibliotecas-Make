@@ -32,6 +32,10 @@ ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP) $(OB
 EXE := $(BIN_DIR)/biblioteca_ml
 EXE_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BIN_DIR)/%,$(ARQ_TESTS))
 
+# Prefixo de instalação (para a regra install)
+# Por padrão usa um diretório na home para não precisar de sudo
+PREFIX := $(HOME)/.local
+
 #Regra para execução de todo o processo
 all: $(EXE)
 
@@ -47,6 +51,10 @@ test: $(EXE_TESTS)
 
 run: $(EXE)
 	@exec $(EXE)
+
+install: $(EXE)
+	mkdir --parents $(DESTDIR)$(PREFIX)/bin
+	cp --force $(EXE) $(DESTDIR)$(PREFIX)/bin
 
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:

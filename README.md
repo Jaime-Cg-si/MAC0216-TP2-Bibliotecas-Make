@@ -34,7 +34,7 @@ A princípio, foi estipulada a seguinte divisão dos módulos de acordo com suas
 - **clean**:    _já implementado_
 - **run**:      _já implementado_
 - **test**:     _já implementado_
-- **install**:  _necessário implementar_
+- **install**:  _já implementado_
 
 ### Adicionais
 
