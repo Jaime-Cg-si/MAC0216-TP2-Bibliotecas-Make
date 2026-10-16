@@ -42,7 +42,7 @@ double calcular_mse(const double *y_real, const double *y_pred, int n) {
         return -1.0;
     }
 
-    return sse;
+    return sse / (double)n;
 }
 
 double calcular_rmse(const double *y_real, const double *y_pred, int n) {
