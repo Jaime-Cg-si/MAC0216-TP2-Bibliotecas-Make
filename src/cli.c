@@ -48,7 +48,7 @@ static void exibir_funcionalidades_no_terminal(){
 
 /**
 * @brief    Função auxiliar que limpa o buffer de entrada, para garantir a validez do input.
-* @note     Consome todos os carcteres até encontrar o '\n' ou EOF
+* @note     Consome todos os caracteres até encontrar o '\n' ou EOF
 */
 
 static void limpar_buffer_input(){
