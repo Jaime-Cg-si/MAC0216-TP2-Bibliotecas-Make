@@ -1,6 +1,7 @@
 #include "cli.h"
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define OPCAO_KNN 1
 
@@ -53,6 +54,95 @@ static void limpar_buffer_input(){
         caracter = getchar();
     }
 }
+
+/**
+* @brief    Função auxiliar que recebe um inteiro da stdin.
+* @param    resposta: ponteiro para inteiro que corresponde ao inteiro lido.
+* @param    mensagem_exibida: string que corresponde à mensagem exibida na stdout.
+* @return   true caso tenha lido um inteiro. False caso o arquivo tenha acabado.
+* @note     A função guarda o valor lido por meio do ponteiro resposta.
+* @note     Repete o processo até o arquivo acabar ou ler um inteiro.
+*/
+static bool ler_inteiro(int* resposta, const char* mensagem_exibida){
+    int retorno_scanf = 1;
+    do{
+        printf("%s ", mensagem_exibida);
+        retorno_scanf = scanf("%d", resposta);
+        if (retorno_scanf == EOF){
+            return false;
+        }
+        limpar_buffer_input();
+    }while(retorno_scanf == 0);
+    return true;
+}
+
+/**
+* @brief    Função auxiliar que recebe um número real da stdin.
+* @param    resposta: ponteiro para double que corresponde ao número real lido.
+* @param    mensagem_exibida: string que corresponde à mensagem exibida na stdout.
+* @return   true caso tenha lido um número real. False caso o arquivo tenha acabado.
+* @note     A função guarda o valor lido por meio do ponteiro resposta.
+* @note     Repete o processo até o arquivo acabar ou ler um número real.
+*/
+static bool ler_double(double* resposta, const char* mensagem_exibida){
+    int retorno_scanf = 1;
+
+    do{
+        printf("%s ", mensagem_exibida);
+        retorno_scanf = scanf("%lf", resposta);
+        if (retorno_scanf == EOF){
+            return false;
+        }
+        limpar_buffer_input();
+
+    }while (retorno_scanf == 0);
+
+    return true;
+}
+
+/**
+* @brief    Função auxiliar que lê o caminho de um arquivo digitado pelo usuário.
+* @param    caminho: vetor onde o caminho lido é armazenado, sem o '\n' final.
+* @param    tamanho_caminho: número de posições do vetor caminho.
+* @param    mensagem_exibida: texto da pergunta, exibido antes de cada tentativa (sem quebrar a linha).
+* @return   true se um caminho não vazio foi lido; false se a entrada terminou (EOF).
+* @note     Lê a linha inteira, então caminhos com espaços são aceitos.
+* @note     Aceita caminhos de até tamanho_caminho - 2 caracteres. Caminhos maiores e linhas vazias
+*           são recusados: o usuário é avisado e a pergunta se repete.
+* @warning  Em caso de false, o conteúdo de caminho não deve ser usado.
+*/
+static bool ler_caminho_arquivo(char* caminho, int tamanho_caminho, const char* mensagem_exibida){
+    char* retorno_fgets;
+
+    while (true){
+
+        printf("%s ", mensagem_exibida);
+        retorno_fgets = fgets(caminho, tamanho_caminho, stdin);
+
+        if (retorno_fgets == NULL){
+            return false;
+        }
+
+        char* quebra_linha = strchr(caminho, '\n');
+        if (quebra_linha != NULL){
+            *quebra_linha = '\0';
+        }
+        else{
+            limpar_buffer_input();
+            if((int)strlen(caminho) == tamanho_caminho-1){
+                printf("Caminho longo demais, digite novamente.\n");
+                limpar_buffer_input();
+                continue;
+            }
+        }
+        if (caminho[0] == '\0'){
+            printf("Caminho vazio, digite novamente.\n");
+            continue;
+        }
+        return true;
+    }
+}
+
 
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades){
 
