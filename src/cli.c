@@ -40,7 +40,7 @@ static void exibir_funcionalidades_no_terminal(){
 
     printf(">>Para executar uma ação, digite o número correspondente.\n");
     printf("%d.\tKNN (K-Nearest Neighbours)\n", OPCAO_KNN);
-    printf("%d.\tMSE (Median Squared Error)\n", OPCAO_MSE);
+    printf("%d.\tMSE (Mean Squared Error)\n", OPCAO_MSE);
     printf("%d.\tSair do programa\n", OPCAO_SAIDA_PROGRAMA);
 
 }
