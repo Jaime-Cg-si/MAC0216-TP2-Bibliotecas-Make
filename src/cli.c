@@ -182,6 +182,14 @@ void cli_run(){
 
     //loop principal
     while (resposta_usuario != OPCAO_SAIDA_PROGRAMA){
+        switch (resposta_usuario) {
+            case OPCAO_KNN:
+                printf("Opção KNN escolhida. Ainda não implementada.\n");
+                break;
+            case OPCAO_MSE:
+                printf("Opção MSE escolhida. Ainda não implementada.\n");
+                break;
+        }
         exibir_separador('#');
         exibir_funcionalidades_no_terminal();
         resposta_usuario = parsear_escolha_funcionalidade_usuario(OPCOES_FUNCIONALIDADES, TAMANHO_VETOR_FUNCIONALIDADES);
