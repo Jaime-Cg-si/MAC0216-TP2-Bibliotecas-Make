@@ -4,8 +4,9 @@
 #include <string.h>
 
 #define OPCAO_KNN 1
+#define OPCAO_MSE 2
 
-static const int OPCOES_FUNCIONALIDADES[] = {OPCAO_SAIDA_PROGRAMA, OPCAO_KNN};
+static const int OPCOES_FUNCIONALIDADES[] = {OPCAO_SAIDA_PROGRAMA, OPCAO_KNN, OPCAO_MSE};
 static const int TAMANHO_VETOR_FUNCIONALIDADES = sizeof(OPCOES_FUNCIONALIDADES) / sizeof(OPCOES_FUNCIONALIDADES[0]);
 
 /**
@@ -39,6 +40,7 @@ static void exibir_funcionalidades_no_terminal(){
 
     printf(">>Para executar uma ação, digite o número correspondente.\n");
     printf("%d.\tKNN (K-Nearest Neighbours)\n", OPCAO_KNN);
+    printf("%d.\tMSE (Median Squared Error)\n", OPCAO_MSE);
     printf("%d.\tSair do programa\n", OPCAO_SAIDA_PROGRAMA);
 
 }
