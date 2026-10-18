@@ -15,6 +15,7 @@ CC       := gcc
 CFLAGS   := -Wall -Wextra -g -std=c11
 CPPFLAGS := -I$(INCLUDE_DIR) -MMD -MP
 LDLIBS   := -lm
+PICFLAGS := -fPIC
 
 #Processo de descoberta dos arquivos-fonte (.c)
 ARQ_SRC   := $(wildcard $(SRC_DIR)/*.c)
@@ -116,7 +117,7 @@ $(BUILD_DIR) $(BIN_DIR) $(LIB_DIR):
 
 #Regra padrão para a compilação .c->.o dos arquivos em src/
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(PICFLAGS) -c $(<) -o $(@)
 
 #Regra padrão para a compilação .c->.o dos arquivos em app/
 $(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
