@@ -62,7 +62,9 @@ $(LIB_ESTATICA): $(OBJ_SRC) | $(LIB_DIR)
 $(LIB_DINAMICA): $(OBJ_SRC) | $(LIB_DIR)
 	$(CC) $(SOFLAGS) $(^) -o $(@) $(LDLIBS)
 
-
+#Regra para a criação do executável estático
+$(EXE_ESTATICO): $(OBJ_APP) $(LIB_ESTATICA) | $(BIN_DIR)
+	$(CC) $(^) -o $(@) $(LDLIBS)
 #Regra para execução dos testes automatizados
 test: $(EXE_TESTS)
 	@erro=0; \
