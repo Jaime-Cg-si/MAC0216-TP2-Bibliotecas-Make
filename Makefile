@@ -47,7 +47,12 @@ EXE_DINAMICO    := $(BIN_DIR)/$(LIB_NOME)_dinamico
 
 # Prefixo de instalação (para a regra install)
 # Por padrão usa um diretório na home para não precisar de sudo
-PREFIX := $(HOME)/.local
+PREFIX  ?= $(HOME)/.local
+DESTDIR ?=
+
+INSTALL_BIN_DIR         := $(PREFIX)/$(BIN_DIR)
+INSTALL_LIB_DIR         := $(PREFIX)/$(LIB_DIR)
+INSTALL_INCLUDE_DIR     := $(PREFIX)/$(INCLUDE_DIR)/$(LIB_NOME)
 
 #Regra para execução de todo o processo
 all: $(LIB_ESTATICA) $(LIB_DINAMICA) $(EXE_DINAMICO) $(EXE_ESTATICO)
@@ -101,9 +106,13 @@ run: $(EXE_DINAMICO)
 
 
 
-install: $(EXE_DINAMICO)
-	mkdir --parents $(DESTDIR)$(PREFIX)/bin
-	cp --force $(<) $(DESTDIR)$(PREFIX)/bin
+install: all
+	mkdir -p $(DESTDIR)$(INSTALL_BIN_DIR)
+	mkdir -p $(DESTDIR)$(INSTALL_INCLUDE_DIR)
+	mkdir -p $(DESTDIR)$(INSTALL_LIB_DIR)
+	cp $(LIB_DINAMICA) $(LIB_ESTATICA) $(DESTDIR)$(INSTALL_LIB_DIR)
+	cp $(INCLUDE_DIR)/*.h $(DESTDIR)$(INSTALL_INCLUDE_DIR)
+	cp $(EXE_ESTATICO) $(EXE_DINAMICO) $(DESTDIR)$(INSTALL_BIN_DIR)
 
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
