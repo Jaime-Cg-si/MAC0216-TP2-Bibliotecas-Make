@@ -36,7 +36,6 @@ ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP) $(OB
 
 
 #Variável do arquivo executável
-EXE := $(BIN_DIR)/biblioteca_ml
 EXE_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BIN_DIR)/%,$(ARQ_TESTS))
 
 #Variáveis das bibliotecas
@@ -51,7 +50,7 @@ EXE_DINAMICO    := $(BIN_DIR)/$(LIB_NOME)_dinamico
 PREFIX := $(HOME)/.local
 
 #Regra para execução de todo o processo
-all: $(EXE)
+all: $(LIB_ESTATICA) $(LIB_DINAMICA) $(EXE_DINAMICO) $(EXE_ESTATICO)
 
 #Regra para a criação da biblioteca estática
 $(LIB_ESTATICA): $(OBJ_SRC) | $(LIB_DIR)
@@ -97,12 +96,14 @@ test: $(EXE_TESTS)
 	echo "Código de saída do teste: $$erro"; \
 	exit $$erro
 
-run: $(EXE)
-	@exec $(EXE)
+run: $(EXE_DINAMICO)
+	@exec $(<)
 
-install: $(EXE)
+
+
+install: $(EXE_DINAMICO)
 	mkdir --parents $(DESTDIR)$(PREFIX)/bin
-	cp --force $(EXE) $(DESTDIR)$(PREFIX)/bin
+	cp --force $(<) $(DESTDIR)$(PREFIX)/bin
 
 #Regra auxiliar para a exibição dos valores de todas as variáveis
 exibe_variaveis:
@@ -148,9 +149,6 @@ $(BUILD_DIR)/%.o: $(APP_DIR)/%.c | $(BUILD_DIR)
 $(BUILD_DIR)/%.o: $(TESTS_DIR)/%.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c $(<) -o $(@)
 
-#Regra para a geração do executável final
-$(EXE): $(OBJ_SRC) $(OBJ_APP) | $(BIN_DIR)
-	$(CC) $(^) -o $(@) $(LDLIBS)
 
 #Regra padrão estática para a geração do executável dos testes
 $(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(OBJ_SRC) | $(BIN_DIR)
