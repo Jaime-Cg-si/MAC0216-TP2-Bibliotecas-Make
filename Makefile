@@ -18,6 +18,7 @@ LDLIBS   := -lm
 PICFLAGS := -fPIC
 AR       := ar
 ARFLAGS  := rcs
+SOFLAGS  := -shared
 
 
 #Processo de descoberta dos arquivos-fonte (.c)
@@ -56,6 +57,11 @@ all: $(EXE)
 $(LIB_ESTATICA): $(OBJ_SRC) | $(LIB_DIR)
 	rm -f $(@)
 	$(AR) $(ARFLAGS) $(@) $(^)
+
+#Regra para a criação da biblioteca dinâmica
+$(LIB_DINAMICA): $(OBJ_SRC) | $(LIB_DIR)
+	$(CC) $(SOFLAGS) $(^) -o $(@) $(LDLIBS)
+
 
 #Regra para execução dos testes automatizados
 test: $(EXE_TESTS)
