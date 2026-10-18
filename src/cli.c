@@ -1,6 +1,7 @@
 #include "cli.h"
 #include "IO.h"
 #include "MSE.h"
+#include "KNN.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -164,7 +165,6 @@ static void liberar_matriz(matriz* m){
     free(m);
 }
 
-
 /** 
 * @brief    Função que coordena todo o fluxo do MSE
 */
@@ -252,6 +252,138 @@ static void fluxo_mse(){
     liberar_matriz(matriz_input);
 }
 
+/**
+* @brief    Função para liberar memória de um knn
+* @param    v: ponteiro para o knn
+*/
+static void liberar_knn(knn* v){
+    if (v == NULL) return;
+
+    if (v->samples != NULL){
+        for (int i = 0; i < v->n_samples; i++){
+            if (v->samples[i] != NULL){
+                free(v->samples[i]->features);
+                free(v->samples[i]);
+            }
+        }
+        free(v->samples);
+    }
+    free(v->max_feature);
+    free(v->min_feature);
+    free(v);
+}
+
+
+/**
+* @brief    Função que coordena todo o fluxo do KNN
+*/
+static void fluxo_knn(){
+    //1. Receber arquivo
+    char caminho[256];
+    bool caminho_valido = ler_caminho_arquivo(caminho, sizeof(caminho), "Insira o caminho do arquivo CSV:");
+    if (caminho_valido == false){
+        printf("Erro ao receber caminho. Voltando ao menu...\n");
+        return;
+    }
+
+    //2. Receber número linhas
+    int numero_linhas;
+    bool num_lin_valido = ler_inteiro(&numero_linhas,"Insira o número de linhas:");
+    if (num_lin_valido == false){
+        printf("Erro ao receber número de linhas. Voltando ao menu...\n");
+        return;
+    }
+    while (numero_linhas <= 0){
+        printf("Número de linhas inválido.\n");
+        num_lin_valido = ler_inteiro(&numero_linhas, "Insira o número de linhas:");
+        if (num_lin_valido == false){
+        printf("Erro ao receber número de linhas. Voltando ao menu...\n");
+        return;
+        }
+    }
+
+    //3. Receber número colunas
+    int numero_colunas;
+    bool num_col_valido = ler_inteiro(&numero_colunas, "Insira o número de colunas:");
+    if (num_col_valido == false){
+        printf("Erro ao receber número de colunas. Voltando ao menu...\n");
+        return;
+    }
+    while (numero_colunas <2){
+        printf("Número inválido de colunas. Digite um valor >=2\n");
+        num_col_valido = ler_inteiro(&numero_colunas, "Insira o número de colunas:");
+        if (num_col_valido == false){
+        printf("Erro ao receber número de colunas. Voltando ao menu...\n");
+        return;
+        }
+    }
+
+    //4. Carregar CSV
+    matriz* matriz_input = carregar_csv(caminho, numero_linhas, numero_colunas);
+    if (matriz_input == NULL){
+        printf("Erro ao carregar arquivo CSV. Voltando ao menu...\n");
+        return;
+    }
+
+    //5. Montar KNN
+    knn* knn_input = carregar_knn(matriz_input);
+    if (knn_input == NULL){
+        printf("Erro ao carregar KNN. Voltando ao menu...\n");
+        liberar_matriz(matriz_input);
+        return;
+    }
+
+    //6. Liberar matriz
+    liberar_matriz(matriz_input);
+
+    //7. Receber k
+    int k;
+    bool k_valido = ler_inteiro(&k, "Insira o valor de k:");
+    if (k_valido == false){
+        printf("Erro ao receber valor de k. Voltando ao menu...\n");
+        liberar_knn(knn_input);
+        return;
+    }
+    while (k < 1 || k > knn_input->n_samples){
+        printf("Número k inválido. Escolha um valor entre [1,%d].\n", knn_input->n_samples);
+        k_valido = ler_inteiro(&k, "Insira o valor de k:");
+        if (k_valido == false){
+        printf("Erro ao receber valor de k. Voltando ao menu...\n");
+        liberar_knn(knn_input);
+        return;
+        }
+    }
+
+    //8. Receber amostra nova
+    sample amostra;
+    amostra.classe = -1;
+    amostra.features = malloc(knn_input->n_features * sizeof(double));
+    if (amostra.features == NULL){
+        printf("Erro ao alocar memória para a amostra. Voltando ao menu...\n");
+        liberar_knn(knn_input);
+        return;
+    }
+
+    char pergunta[64];
+    for(int i = 0; i < knn_input->n_features; i++){
+        snprintf(pergunta, sizeof(pergunta), "Valor da característica %d:", i+1);
+        bool valor_lido = ler_double(&amostra.features[i], pergunta);
+        if (valor_lido == false){
+            printf("Erro ao receber a amostra. Voltando ao menu...\n");
+            free(amostra.features);
+            liberar_knn(knn_input);
+            return;
+        }
+    }
+
+    //9. Classificar a amostra
+    int classe_prevista = rodar_knn(knn_input, &amostra, k);
+    printf("Classe prevista para a amostra (k = %d): %d\n", k, classe_prevista);
+
+    free(amostra.features);
+    liberar_knn(knn_input);
+}
+
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades){
 
     if (tamanho_vetor_funcionalidades <= 0 || opcoes_funcionalidades_validas == NULL){
@@ -290,7 +422,7 @@ void cli_run(){
     while (resposta_usuario != OPCAO_SAIDA_PROGRAMA){
         switch (resposta_usuario) {
             case OPCAO_KNN:
-                printf("Opção KNN escolhida. Ainda não implementada.\n");
+                fluxo_knn();
                 break;
             case OPCAO_MSE:
                 fluxo_mse();
