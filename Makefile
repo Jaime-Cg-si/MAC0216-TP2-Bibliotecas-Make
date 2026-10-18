@@ -160,7 +160,7 @@ $(BUILD_DIR)/%.o: $(TESTS_DIR)/%.c | $(BUILD_DIR)
 
 
 #Regra padrão estática para a geração do executável dos testes
-$(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(OBJ_SRC) | $(BIN_DIR)
+$(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(LIB_ESTATICA) | $(BIN_DIR)
 	$(CC) $(^) -o $(@) $(LDLIBS)
 
 
