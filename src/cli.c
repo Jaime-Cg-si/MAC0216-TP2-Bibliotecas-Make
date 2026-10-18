@@ -1,5 +1,8 @@
 #include "cli.h"
+#include "IO.h"
+#include "MSE.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -70,6 +73,7 @@ static bool ler_inteiro(int* resposta, const char* mensagem_exibida){
     do{
         printf("%s ", mensagem_exibida);
         retorno_scanf = scanf("%d", resposta);
+        printf("\n");
         if (retorno_scanf == EOF){
             return false;
         }
@@ -92,6 +96,7 @@ static bool ler_double(double* resposta, const char* mensagem_exibida){
     do{
         printf("%s ", mensagem_exibida);
         retorno_scanf = scanf("%lf", resposta);
+        printf("\n");
         if (retorno_scanf == EOF){
             return false;
         }
@@ -120,6 +125,7 @@ static bool ler_caminho_arquivo(char* caminho, int tamanho_caminho, const char* 
 
         printf("%s ", mensagem_exibida);
         retorno_fgets = fgets(caminho, tamanho_caminho, stdin);
+        printf("\n");
 
         if (retorno_fgets == NULL){
             return false;
@@ -145,6 +151,106 @@ static bool ler_caminho_arquivo(char* caminho, int tamanho_caminho, const char* 
     }
 }
 
+/**
+* @brief    Função para desalocar memória de uma matriz
+* @param    m: ponteiro para a matriz
+*/
+static void liberar_matriz(matriz* m){
+    if (m == NULL) return;
+    for (int i = 0; i < m->l; i++){
+        free(m->data[i]);
+    }
+    free(m->data);
+    free(m);
+}
+
+
+/** 
+* @brief    Função que coordena todo o fluxo do MSE
+*/
+static void fluxo_mse(){
+
+    // 1. Recebimento do CSV
+    char caminho[256];
+    char mensagem_csv[] = "Insira o caminho do arquivo CSV:";
+    bool caminho_valido = ler_caminho_arquivo(caminho, sizeof(caminho), mensagem_csv);
+    if (caminho_valido == false){
+        printf("Erro no recebimento do caminho do arquivo. Voltando ao menu...\n");
+        return;
+    }
+
+    // 2. Recebimento número de linhas
+    int numero_linhas = 0;
+    char mensagem_linha[] = "Insira o número de linhas:";
+    bool num_lin_valido = ler_inteiro(&numero_linhas, mensagem_linha);
+    if (num_lin_valido == false){
+        printf("Erro no recebimento do número de linhas. Voltando ao menu...\n");
+        return;
+    }
+    while (numero_linhas <= 0){
+        printf("Número de linhas não pode ser <= 0.\n");
+        num_lin_valido = ler_inteiro(&numero_linhas, mensagem_linha);
+        if (num_lin_valido == false){
+        printf("Erro no recebimento do número de linhas. Voltando ao menu...\n");
+        return;
+    }
+    }
+
+    // 3. Recebendo número de colunas
+    int numero_colunas = 0;
+    char mensagem_coluna[] = "Insira o número de colunas:";
+    bool num_col_valido = ler_inteiro(&numero_colunas, mensagem_coluna);
+    if (num_col_valido == false){
+        printf("Erro no recebimento do número de colunas. Voltando ao menu...\n");
+        return;
+    }
+    while (numero_colunas <= 0){
+        printf("Número de colunas não pode ser <= 0.\n");
+        num_col_valido = ler_inteiro(&numero_colunas, mensagem_coluna);
+        if (num_col_valido == false){
+        printf("Erro no recebimento do número de colunas. Voltando ao menu...\n");
+        return;
+    }
+    }
+
+    // 4. Coluna com os valores observador
+    int numero_coluna_observacao = 0;
+    char mensagem_coluna_observacao[] = "Insira qual a coluna dos valores reais:";
+    bool num_col_obs = ler_inteiro(&numero_coluna_observacao, mensagem_coluna_observacao);
+    if (num_col_obs == false){
+        printf("Erro no recebimento do índice da coluna dos valores reais. Voltando ao menu...\n");
+        return;
+    }
+
+    // 5. Coluna com os valores preditivos
+    int numero_coluna_previsao = 0;
+    char mensagem_coluna_previsao[] = "Insira qual a coluna dos valores preditos:";
+    bool num_col_predito = ler_inteiro(&numero_coluna_previsao, mensagem_coluna_previsao);
+    if (num_col_predito == false){
+        printf("Erro no recebimento do índice da coluna dos valores preditos. Voltando ao menu...\n");
+        return;
+    }
+
+    // 6. Carregando CSV
+    matriz* matriz_input = carregar_csv(caminho, numero_linhas, numero_colunas);
+
+    if (matriz_input == NULL){
+        printf("Erro ao carregar arquivo CSV. Voltando para o menu...\n");
+        return;
+    }
+
+    // 7. Cálculo do MSE
+    double resultado_mse = calcular_mse_matriz(matriz_input, numero_coluna_observacao, numero_coluna_previsao);
+    if (resultado_mse < 0.0){
+        printf("Erro ao calcular MSE. Voltando para o menu...\n");
+        liberar_matriz(matriz_input);
+        return;
+    }
+
+    // 8. Display do resultado
+    printf("Resultado do MSE entre as colunas %d (valores reais) e %d (previsões): %.6f\n", numero_coluna_observacao, numero_coluna_previsao, resultado_mse);
+    liberar_matriz(matriz_input);
+}
 
 int parsear_escolha_funcionalidade_usuario(const int* opcoes_funcionalidades_validas, const int tamanho_vetor_funcionalidades){
 
@@ -187,7 +293,7 @@ void cli_run(){
                 printf("Opção KNN escolhida. Ainda não implementada.\n");
                 break;
             case OPCAO_MSE:
-                printf("Opção MSE escolhida. Ainda não implementada.\n");
+                fluxo_mse();
                 break;
         }
         exibir_separador('#');
