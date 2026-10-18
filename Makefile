@@ -16,6 +16,9 @@ CFLAGS   := -Wall -Wextra -g -std=c11
 CPPFLAGS := -I$(INCLUDE_DIR) -MMD -MP
 LDLIBS   := -lm
 PICFLAGS := -fPIC
+AR       := ar
+ARFLAGS  := rcs
+
 
 #Processo de descoberta dos arquivos-fonte (.c)
 ARQ_SRC   := $(wildcard $(SRC_DIR)/*.c)
@@ -48,6 +51,11 @@ PREFIX := $(HOME)/.local
 
 #Regra para execução de todo o processo
 all: $(EXE)
+
+#Regra para a criação da biblioteca estática
+$(LIB_ESTATICA): $(OBJ_SRC) | $(LIB_DIR)
+	rm -f $(@)
+	$(AR) $(ARFLAGS) $(@) $(^)
 
 #Regra para execução dos testes automatizados
 test: $(EXE_TESTS)
