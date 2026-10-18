@@ -7,7 +7,8 @@ SRC_DIR     := src
 TESTS_DIR   := tests
 BIN_DIR     := bin
 BUILD_DIR   := build
-DADOS_DIR	:= $(TESTS_DIR)/dados
+DADOS_DIR   := $(TESTS_DIR)/dados
+LIB_DIR     := lib
 
 #Variáveis de compilação
 CC       := gcc
@@ -32,6 +33,13 @@ ARQ_D := $(patsubst $(BUILD_DIR)/%.o,$(BUILD_DIR)/%.d,$(OBJ_SRC) $(OBJ_APP) $(OB
 #Variável do arquivo executável
 EXE := $(BIN_DIR)/biblioteca_ml
 EXE_TESTS := $(patsubst $(TESTS_DIR)/%.c,$(BIN_DIR)/%,$(ARQ_TESTS))
+
+#Variáveis das bibliotecas
+LIB_NOME        := machinelearning
+LIB_ESTATICA    := $(LIB_DIR)/lib$(LIB_NOME).a
+LIB_DINAMICA    := $(LIB_DIR)/lib$(LIB_NOME).so
+EXE_ESTATICO    := $(BIN_DIR)/$(LIB_NOME)_estatico
+EXE_DINAMICO    := $(BIN_DIR)/$(LIB_NOME)_dinamico
 
 # Prefixo de instalação (para a regra install)
 # Por padrão usa um diretório na home para não precisar de sudo
@@ -83,10 +91,17 @@ exibe_variaveis:
 	@echo "[$(TESTS_DIR)]"
 	@echo "[$(BIN_DIR)]"
 	@echo "[$(BUILD_DIR)]"
+	@echo "[$(LIB_DIR)]"
 	@echo "### VARIÁVEIS DE COMPILAÇÃO ###"
 	@echo "[$(CC)]"
 	@echo "[$(CFLAGS)]"
 	@echo "[$(CPPFLAGS)]"
+	@echo "### VARIÁVEIS DE BIBLIOTECA ###"
+	@echo "[$(LIB_NOME)]"
+	@echo "[$(LIB_ESTATICA)]"
+	@echo "[$(LIB_DINAMICA)]"
+	@echo "[$(EXE_ESTATICO)]"
+	@echo "[$(EXE_DINAMICO)]"
 	@echo "### DESCOBERTA DE ARQUIVOS .C ###"
 	@echo "[ARQ_SRC = $(ARQ_SRC)]"
 	@echo "[OBJ_SRC = $(OBJ_SRC)]"
@@ -95,8 +110,8 @@ exibe_variaveis:
 	@echo "[ARQ_TESTS = $(ARQ_TESTS)]"
 	@echo "[OBJ_TESTS =  $(OBJ_TESTS)]"
 
-#Regra para criação dos diretórios build/ e bin/
-$(BUILD_DIR) $(BIN_DIR):
+#Regra para criação dos diretórios build/ ; bin/ ; lib/
+$(BUILD_DIR) $(BIN_DIR) $(LIB_DIR):
 	mkdir -p $(@)
 
 #Regra padrão para a compilação .c->.o dos arquivos em src/
@@ -125,5 +140,6 @@ $(EXE_TESTS): $(BIN_DIR)/%: $(BUILD_DIR)/%.o $(OBJ_SRC) | $(BIN_DIR)
 clean: 
 	rm -rf $(BIN_DIR)
 	rm -rf $(BUILD_DIR)
+	rm -rf $(LIB_DIR)
 
 -include $(ARQ_D)
