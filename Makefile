@@ -65,6 +65,11 @@ $(LIB_DINAMICA): $(OBJ_SRC) | $(LIB_DIR)
 #Regra para a criação do executável estático
 $(EXE_ESTATICO): $(OBJ_APP) $(LIB_ESTATICA) | $(BIN_DIR)
 	$(CC) $(^) -o $(@) $(LDLIBS)
+
+#Regra para a criação do executável dinâmico
+$(EXE_DINAMICO): $(OBJ_APP) $(LIB_DINAMICA) | $(BIN_DIR)
+	$(CC) $(OBJ_APP) -L$(LIB_DIR) -l$(LIB_NOME) -Wl,-rpath,'$$ORIGIN/../$(LIB_DIR)' -o $(@) $(LDLIBS)
+
 #Regra para execução dos testes automatizados
 test: $(EXE_TESTS)
 	@erro=0; \
